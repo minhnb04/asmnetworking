@@ -21,32 +21,21 @@
 
     <ImageView
         android:id="@+id/imv_result"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="342dp"
+        android:layout_height="254dp"
         android:layout_margin="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/txv_resultBase64"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txv_result"
         tools:ignore="MissingConstraints" />
-
-    <TextView
-        android:id="@+id/txv_resultBase64"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Result Base64"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txv_result"
-        app:layout_constraintVertical_bias="0.417" />
 
     <EditText
         android:id="@+id/edt_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:minHeight="48dp"
         android:text="2023-07-01"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:layout_editor_absoluteX="0dp" />
@@ -75,12 +64,12 @@
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/btn_postValue"
+        android:id="@+id/btn_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="328dp"
         android:layout_marginEnd="60dp"
-        android:text="PostValue"
+        android:text="List"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txv_result"
         tools:ignore="MissingConstraints" />

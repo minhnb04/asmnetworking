@@ -1,7 +1,7 @@
 package com.example.myappnetworking.model;
 
 public class Planetary {
-
+    public String _id;
     public String copyright;
     public String date;
     public String explanation;
@@ -10,6 +10,40 @@ public class Planetary {
     public String service_version;
     public String title;
     public String url;
+
+    public Planetary(String copyright, String date, String explanation, String hdurl, String media_type, String service_version, String title, String url) {
+        this.copyright = copyright;
+        this.date = date;
+        this.explanation = explanation;
+        this.hdurl = hdurl;
+        this.media_type = media_type;
+        this.service_version = service_version;
+        this.title = title;
+        this.url = url;
+    }
+
+    public Planetary(String _id, String title, String url, String date, int i) {
+        this._id = _id;
+        this.title = title;
+        this.date = date;
+        this.url = url;
+    }
+
+    public Planetary(String title, String url, String date) {
+        this.title = title;
+        this.date = date;
+        this.url = url;
+    }
+
+
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
 
     public String getCopyright() {
         return copyright;

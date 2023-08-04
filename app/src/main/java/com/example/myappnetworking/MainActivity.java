@@ -3,8 +3,10 @@ package com.example.myappnetworking;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,15 +24,19 @@ import java.util.Base64;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText edt_date;
-    TextView txv_result, txv_resultBase64;
+    TextView txv_result;
     ImageView imv_result;
-    Button btn_getValue, btn_postValue;
+    Button btn_getValue, btn_list;
+    Planetary currentPlanetary;
 
-    private static final String GET_URL = "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=";
+    private static final String TAG = MainActivity.class.getSimpleName();
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -43,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
 
         edt_date = findViewById(R.id.edt_date);
         txv_result = findViewById(R.id.txv_result);
-        txv_resultBase64 = findViewById(R.id.txv_resultBase64);
         imv_result = findViewById(R.id.imv_result);
         btn_getValue = findViewById(R.id.btn_getValue);
-        btn_postValue = findViewById(R.id.btn_postValue);
+        btn_list = findViewById(R.id.btn_list);
+
 
         btn_getValue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,18 +61,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        btn_postValue.setOnClickListener(new View.OnClickListener() {
+        btn_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    callPostApi();
-                } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, "Call PostAPI error", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
+                Intent intent = new Intent(MainActivity.this, ListActivity.class);
+                startActivity(intent);
             }
         });
+
+
 
     }
 
@@ -78,8 +81,20 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(Call<Planetary> call, Response<Planetary> response) {
                         Planetary planetary = response.body();
                         if(planetary != null){
-                            txv_result.setText(planetary.getUrl());
+                            txv_result.setText(planetary.getTitle());
+                            String date = planetary.getDate();
+                            String title = planetary.getTitle();
+                            String url = planetary.getUrl();
+
+                            currentPlanetary = new Planetary(title, url, date);
                             Picasso.with(MainActivity.this).load(planetary.getUrl()).into(imv_result);
+
+                            try {
+                                callPostApi();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     }
                     @Override
@@ -91,9 +106,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void callPostApi() throws Exception {
-        Toast.makeText(MainActivity.this, "Chưa Post được!!!", Toast.LENGTH_LONG).show();
+        // Gọi API POST và nhận dữ liệu trả về
+        PostApiServer.POST_API_SERVER.postPlanetary(currentPlanetary)
+        .enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(MainActivity.this, "Post Value",
+                        Toast.LENGTH_SHORT).show();
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "Dữ liệu đã được POST thành công!");
+                    Toast.makeText(MainActivity.this, "Dữ liệu đã được POST thành công!", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.e(TAG, "POST không thành công. Mã trạng thái: " + response.code());
+                    Toast.makeText(MainActivity.this, "Dữ liệu chưa được POST!", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e(TAG, "Lỗi khi gọi API POST: " + t.getMessage());
+            }
+
+        });
+
     }
-
-
 
 }
