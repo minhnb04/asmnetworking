@@ -55,22 +55,30 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(){
-//        mAuth.signInWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString())
-        mAuth.signInWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "signInWithEmail:success",
-                                    Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class );
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+
+        try {
+            mAuth.signInWithEmailAndPassword(et_email.getText().toString(), et_password.getText().toString())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(LoginActivity.this, "signInWithEmail:success",
+                                        Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class );
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+
+        }catch (Exception e){
+            Toast.makeText(LoginActivity.this, "Không thể đăng nhập!!!",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
 }
